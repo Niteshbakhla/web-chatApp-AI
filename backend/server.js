@@ -1,25 +1,26 @@
-import { app } from "./src/app.js";
+import app from "./src/app.js";
 import config from "./src/config/config.js";
 import connectDB from "./src/db/db.js";
 import { Server } from "socket.io";
 import { createServer } from "http";
+import { socketConnection } from "./src/sockets/index.js";
 connectDB();
 
 const PORT = config.PORT;
 
 const server = createServer(app);
-const io = new Server(server, {
+export const io = new Server(server, {
             cors: {
                         origin: config.FRONTEND_URL,
-                        methods: ["GET", "POST"]
+                        methods: ["GET", "POST"],
+                        credentials: true
             }
 });
 
-
-io.on("connection", (socket) => {
-            console.log("User connected", socket.id);
-})
+socketConnection(io);
 
 server.listen(5000, () => {
             console.log(`Server is listening at port ${PORT}`);
 })
+
+
