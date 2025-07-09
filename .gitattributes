@@ -1,0 +1,8 @@
+# Handle all files as text and normalize to LF in the repo
+* text=auto
+
+# Force LF for these common text files
+*.js text eol=lf
+*.json text eol=lf
+*.ts text eol=lf
+*.md text eol=lf
