@@ -26,7 +26,6 @@ export const sendMessage = async (req, res) => {
 export const getMessages = async (req, res) => {
             const { otherUserId } = req.params;
             const userId = req.user._id;
-
             const messages = await Message.find({
                         $or: [
                                     { sender: userId, receiver: otherUserId },
@@ -34,5 +33,6 @@ export const getMessages = async (req, res) => {
                         ],
             }).sort("createdAt");
 
-            res.status(200).json(messages);
+
+            res.status(200).json({messages});
 };

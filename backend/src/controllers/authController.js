@@ -62,14 +62,13 @@ export const registerUser = asyncHandler(
 export const loginUser = asyncHandler(
             async (req, res) => {
                         const { email, password } = req.body;
-
                         // Basic validation
                         if (!email || !password) {
                                     throw new CustomError("All fields are required", 400);
                         }
 
                         // Find user
-                        const user = await User.findOne({ email });
+                        const user = await User.findOne({ email }).select("+password");
                         if (!user) {
                                     throw new CustomError("Invalid credentials", 400);
                         }
@@ -122,10 +121,23 @@ export const logoutUser = asyncHandler(
 );
 
 
+// @desc isMe user
+// @route get /api/auth/profile
 export const isMe = asyncHandler(
             async (req, res) => {
                         const userId = req.user.id;
                         const user = await User.findById(userId)
                         res.status(200).json({ success: true, user })
+            }
+)
+
+export const getAllUser = asyncHandler(
+            async (req, res) => {
+                        const userId = req.user._id;
+                        const users = await User.find({ _id: { $ne: userId } }).sort({ createdAt: -1 });
+                        if (!users) {
+                                    throw new CustomError("No users found", 404);
+                        }
+                        res.status(200).json({ success: true, users })
             }
 )

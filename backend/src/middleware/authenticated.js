@@ -7,7 +7,6 @@ import config from "../config/config.js";
 const isAuthenticated = asyncHandler(
             async (req, res, next) => {
                         let token = req.cookies?.token;
-
                         if (!token) {
                                     throw new CustomError("Not authorized , not token", 401)
                         }

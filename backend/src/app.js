@@ -3,11 +3,12 @@ import errorHandler from "./middleware/errorHandler.js";
 import authRoutes from "./routes/authRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
 import messageRoutes from "./routes/messageRoutes.js"
+import cookieParser from "cookie-parser";
 import cors from "cors";
-import config from "./config/config.js";
 
 const app = express();
 
+app.use(cookieParser())
 app.use(express.json());
 app.use(cors({
             origin: "http://localhost:5173",

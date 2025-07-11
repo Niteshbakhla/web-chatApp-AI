@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Eye, EyeOff, MessageCircle, Mail, Lock, User, ArrowRight } from 'lucide-react';
 import axiosinstance from '../axios/axios';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const AuthPages = () => {
             const [isLogin, setIsLogin] = useState(() => {
@@ -18,6 +19,7 @@ const AuthPages = () => {
             });
             const [errors, setErrors] = useState({});
             const [isLoading, setIsLoading] = useState(false);
+            const navigate = useNavigate();
 
             const handleInputChange = (e) => {
                         const { name, value } = e.target;
@@ -70,18 +72,21 @@ const AuthPages = () => {
                                     // Simulate API call
 
                                     const logValue = isLogin ? "login" : "register"
-
-                                    console.log(logValue)
                                     const { data } = await axiosinstance.post(`/api/auth/${logValue}`, formData);
                                     setIsLoading(false);
-
+                                    if (logValue === "login") {
+                                                navigate("/chat");
+                                    } else {
+                                                setIsLogin(true)
+                                    }
                                     toast.success(data.message)
                                     console.log(data)
-                                    // Handle successful submission here
-                                    console.log('Form submitted:', formData);
                         } catch (error) {
-                                    console.log(error)
-                                    toast.error(error.response.data.message);
+                                    const message = error.response?.data.message;
+                                    if (error.status === 409) {
+                                                setIsLogin(true)
+                                    }
+                                    toast.error(message);
                                     setIsLoading(false);
                         }
             };

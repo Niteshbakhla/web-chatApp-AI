@@ -1,14 +1,18 @@
 import ChatBox from "./components/ChatBox";
 import AuthPages from "./pages/Auth";
+import ChatApp from "./pages/Chat";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
 
 
   return (
-    <div>
-      {/* <ChatBox /> */}
-      <AuthPages />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/auth" element={<AuthPages />} />
+        <Route path="/chat" element={<ChatApp />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

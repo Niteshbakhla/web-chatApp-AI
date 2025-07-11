@@ -1,26 +1,26 @@
 import cookie from "cookie";
 import jwt from "jsonwebtoken";
-import { io } from "../../server";
 import asyncHandler from "../utils/asyncHandler.js";
-import CustomError from "../utils/CustomError.js";
-import config from "../config/config";
+import config from "../config/config.js";
 
-io.use(asyncHandler(async (socket, next) => {
-            const cookies = socket.handshake.headers.cookie;
+export const socketMidde = asyncHandler(async (socket, next) => {
+            const cookies = socket.handshake.headers?.cookie;
+            // return console.log(cookies)
             if (!cookies) {
-                        throw new CustomError("Unauthorized- no cookies", 401);
+                        socket.userId = null;
+                        return next();
             }
 
             const parseCookies = cookie.parse(cookies);
-            const token = parseCookies.token;
+            const token = parseCookies?.token;
+
             if (!token) {
-                        throw new CustomError("Unauthorized - no token in cookies")
+                        socket.userId = null;
+                        return next();
             }
 
 
             const decoded = jwt.verify(token, config.JWT_SECRET);
             socket.userId = decoded.id;
             next();
-
-
-}))
+})
