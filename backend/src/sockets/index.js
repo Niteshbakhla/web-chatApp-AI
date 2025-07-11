@@ -12,10 +12,11 @@ export const socketConnection = (io) => {
                         // Join user to a room (you can use userId)
                         // console.log(`User ${userId} joined their roome`);
 
-                        socket.on("sendMessage", async ({ receiverId, message }) => {
+                        socket.on("sendMessage", async ({ receiverId, message, imageUrl }) => {
                                     // console.log(`Message from ${userId} to ${receiverId}:${message}`);
-                                    const userMessage = await Message.create({ sender: userId, receiver: receiverId, message });
+                                    const userMessage = await Message.create({ sender: userId, receiver: receiverId, message, imageUrl });
                                     // Emit message to reciever
+                                    return console.log(userMessage)
                                     io.to(receiverId).emit("recieveMessage", userMessage);
                         });
 

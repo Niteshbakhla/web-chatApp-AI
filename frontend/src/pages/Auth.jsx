@@ -82,6 +82,7 @@ const AuthPages = () => {
                                     toast.success(data.message)
                                     console.log(data)
                         } catch (error) {
+                                    console.log(error)
                                     const message = error.response?.data.message;
                                     if (error.status === 409) {
                                                 setIsLogin(true)

@@ -4,6 +4,7 @@ import axiosinstance from '../axios/axios';
 import ChatBox from '../components/ChatBox';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { useSocket } from '../context/SocketContext';
 
 
 const ChatApp = () => {
@@ -11,6 +12,7 @@ const ChatApp = () => {
             const [searchTerm, setSearchTerm] = useState('');
             const [chatUsers, setChatUsers] = useState([]);
             const navigate = useNavigate();
+            const { currentUserId } = useSocket();
 
 
             const filteredUsers = chatUsers?.filter(user =>
@@ -29,7 +31,7 @@ const ChatApp = () => {
                         }
                         fetchAllUsers();
             }, [])
-console.log(filteredUsers)
+
 
             const logoutHandler = async () => {
                         try {
@@ -84,7 +86,7 @@ console.log(filteredUsers)
                                                                                     <div className="flex items-center space-x-3">
                                                                                                 <div className="relative">
                                                                                                             <img
-                                                                                                                        src={user.avatar}
+                                                                                                                        src={user?.avatar}
                                                                                                                         alt={user.username}
                                                                                                                         className="w-12 h-12 rounded-full object-cover"
                                                                                                             />
@@ -98,9 +100,9 @@ console.log(filteredUsers)
                                                                                                             </div>
                                                                                                             <p className="text-sm text-gray-600 truncate">{user.lastMessage}</p>
                                                                                                 </div>
-                                                                                                {user.unread > 0 && (
+                                                                                                {user?.unread > 0 && (
                                                                                                             <div className="bg-emerald-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                                                                                                        {user.unread}
+                                                                                                                        {user?.unread}
                                                                                                             </div>
                                                                                                 )}
                                                                                     </div>
@@ -111,7 +113,8 @@ console.log(filteredUsers)
 
                                     {/* Chat Area */}
                                     {
-                                                selectedUser ? <ChatBox selectedUser={selectedUser} setSelectedUser={setSelectedUser} /> : <div className="flex-1 hidden md:flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-50">
+
+                                                currentUserId ? <ChatBox selectedUser={selectedUser} setSelectedUser={setSelectedUser} /> : <div className="flex-1 hidden md:flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-50">
                                                             <div className="text-center">
                                                                         <div className="w-24 h-24 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
                                                                                     <Send className="h-12 w-12 text-white" />
